@@ -1,15 +1,5 @@
 version: '3'
 
-# Run as
-# docker-compose build; docker-compose up -d
-# Check with
-# docker ps
-# Then check the logs with
-# docker logs --tail 50 $container_id
-# docker-compose images
-# docker-compose logs --tail 20 repo_name
-
-
 services:
 
   redis:
@@ -20,23 +10,18 @@ services:
       - app-tier
 
   python_app:
+    container_name: python_app_container
     build:
       context: .
       dockerfile: Dockerfile
+    image: python_app_image
     ports:
       - "5000:5000"
     depends_on:
       - redis
     networks:
       - app-tier
-    #command: sh -c "celery -A celery_tasks worker --loglevel=info -f celery.logs"
-    #command: tail -f /dev/null
 
 networks:
   app-tier:
     driver: bridge
-
-#CLEANUP
-#docker-compose down
-#docker rmi carvana-exercise_frontend
-#docker rmi carvana-exercise_backend
